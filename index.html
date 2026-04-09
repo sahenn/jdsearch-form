@@ -281,7 +281,7 @@ textarea { resize: vertical; min-height: 80px; }
 </div>
 
 <div class="success" id="success">
-Profile submitted! Scott will update your search settings within 24 hours. You'll start receiving matched jobs at <strong>scott.a.henning+jbk@gmail.com</strong>.
+Profile submitted! Scott will review your answers and set up your personalized job search within 24 hours. You'll start receiving matched jobs by email.
 </div>
 
 </form>
@@ -303,15 +303,15 @@ document.querySelectorAll('.chips').forEach(container => {
     });
 });
 
-// Form submission — copies to clipboard + opens pre-filled email
+// Form submission — POST to Supabase edge function
 document.getElementById('form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
-    btn.textContent = 'Preparing...';
+    btn.textContent = 'Submitting...';
 
     const form = e.target;
-    const data = {};
+    const data = { name: 'Joe Kardon' };
 
     // Collect all form fields
     form.querySelectorAll('input, select, textarea').forEach(el => {
@@ -326,73 +326,29 @@ document.getElementById('form').addEventListener('submit', async (e) => {
         data[name] = selected.join(', ');
     });
 
-    // Format as readable text
-    const sections = [
-        { header: 'EXPERIENCE', keys: ['work_history', 'loc_scope', 'vault_scope', 'operam_scope', 'managed_people', 'managed_managers', 'largest_revenue'] },
-        { header: 'TARGETING', keys: ['target_cash', 'target_tc', 'open_sectors', 'dream_companies', 'blacklist'] },
-        { header: 'ROLE PREFERENCES', keys: ['role_openness', 'seniority', 'relocation', 'interview_dealbreakers', 'grind_pref', 'company_stage'] },
-        { header: 'COMEDY', keys: ['comedy_impact', 'comedy_in_profile'] },
-    ];
-    const labels = {
-        work_history: 'Work History', loc_scope: 'Laughter On Call Scope',
-        vault_scope: 'Vault AI Scope', operam_scope: 'Operam CoS Scope',
-        managed_people: 'Managed People', managed_managers: 'Managed Managers',
-        largest_revenue: 'Largest Revenue/Budget', target_cash: 'Target Cash Floor',
-        target_tc: 'Target TC Floor', open_sectors: 'Sector Openness',
-        dream_companies: 'Dream Companies', blacklist: 'Blacklisted',
-        role_openness: 'Role Openness', seniority: 'Seniority Target',
-        relocation: 'Relocation', interview_dealbreakers: 'Interview Dealbreakers',
-        grind_pref: 'Grind Preference', company_stage: 'Company Stage',
-        comedy_impact: 'Comedy Impact', comedy_in_profile: 'Comedy in Profile',
-        freeform: 'Additional Notes',
-    };
-
-    let body = 'JDSearch Profile — Joe Kardon\n' + '='.repeat(40) + '\n\n';
-    for (const section of sections) {
-        body += `--- ${section.header} ---\n`;
-        for (const key of section.keys) {
-            if (data[key]) body += `${labels[key]}: ${data[key]}\n`;
-        }
-        body += '\n';
-    }
-
-    const jobNames = [
-        'Snap — Head of Partnerships (Santa Monica)',
-        'Scopely — Chief of Staff to CEO (Culver City)',
-        'Riot Games — Dir BD (West LA)',
-        'Tubi/Fox — VP Growth & Strategy (LA)',
-        'Live Nation — Head of Partnerships (Beverly Hills)',
-        'Patreon — GM Creator Partnerships (Remote)',
-        'Headspace — Head of Growth (Santa Monica)',
-        'Warner Bros — Dir Corporate Strategy (Burbank)',
-        'Calm — Head of BD & Partnerships (LA)',
-        'FaZe — Chief of Staff (LA)',
-    ];
-    body += '--- JOB RATINGS ---\n';
-    for (let i = 1; i <= 10; i++) {
-        const rating = data[`job_${i}`];
-        if (rating) body += `${jobNames[i-1]}: ${rating}/10\n`;
-    }
-    if (data['freeform']) body += `\n--- NOTES ---\n${data['freeform']}\n`;
-
-    // Copy to clipboard
     try {
-        await navigator.clipboard.writeText(body);
-    } catch(e) {}
+        const resp = await fetch('https://epglxhuurqpsikiaitkq.supabase.co/functions/v1/form-submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        const result = await resp.json();
 
-    // Open mailto with subject pre-filled (body is in clipboard)
-    const mailto = `mailto:scott.a.henning@gmail.com?subject=${encodeURIComponent('JDSearch Profile: Joe Kardon')}&body=${encodeURIComponent('(Your profile data has been copied to your clipboard — just paste it here with Cmd+V or Ctrl+V)\n\n')}`;
-    window.location.href = mailto;
-
-    btn.textContent = 'Done!';
-    document.getElementById('success').innerHTML =
-        '<strong>Your profile has been copied to your clipboard!</strong><br><br>' +
-        'Your email app should have opened with a new message to Scott.<br>' +
-        'Just <strong>paste (Cmd+V)</strong> your profile into the email body and hit send.<br><br>' +
-        '<em>If your email app didn\'t open, paste the clipboard contents into an email to scott.a.henning@gmail.com</em>';
-    document.getElementById('success').style.display = 'block';
-    form.style.opacity = '0.6';
-    form.style.pointerEvents = 'none';
+        if (result.success) {
+            btn.textContent = 'Submitted!';
+            document.getElementById('success').style.display = 'block';
+            form.style.opacity = '0.6';
+            form.style.pointerEvents = 'none';
+        } else {
+            btn.textContent = 'Error — Try Again';
+            btn.disabled = false;
+            alert('Submission failed: ' + (result.error || 'Unknown error'));
+        }
+    } catch (err) {
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+        alert('Network error. Please check your connection and try again.');
+    }
 });
 </script>
 </body>

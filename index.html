@@ -303,12 +303,13 @@ document.querySelectorAll('.chips').forEach(container => {
     });
 });
 
-// Form submission — sends via Formspree (free, no signup for first form)
-document.getElementById('form').addEventListener('submit', async (e) => {
+// Form submission — creates a GitHub Issue on sahenn/jdsearch-form
+// Zero third parties, zero tokens needed — Joe just clicks "Submit" on GitHub
+document.getElementById('form').addEventListener('submit', (e) => {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
-    btn.textContent = 'Sending...';
+    btn.textContent = 'Preparing...';
 
     const form = e.target;
     const data = {};
@@ -326,7 +327,50 @@ document.getElementById('form').addEventListener('submit', async (e) => {
         data[name] = selected.join(', ');
     });
 
-    // Add job ratings as structured data
+    // Format as markdown for the GitHub Issue
+    const labels = {
+        work_history: 'Work History',
+        loc_scope: 'Laughter On Call Scope',
+        vault_scope: 'Vault AI Scope',
+        operam_scope: 'Operam CoS Scope',
+        managed_people: 'Managed People',
+        managed_managers: 'Managed Managers',
+        largest_revenue: 'Largest Revenue/Budget',
+        target_cash: 'Target Cash Floor',
+        target_tc: 'Target TC Floor',
+        open_sectors: 'Sector Openness',
+        dream_companies: 'Dream Companies',
+        blacklist: 'Blacklisted Companies/Industries',
+        role_openness: 'Role Openness',
+        seniority: 'Seniority Target',
+        relocation: 'Relocation',
+        interview_dealbreakers: 'Interview Dealbreakers',
+        grind_pref: 'Grind Preference',
+        company_stage: 'Company Stage Preference',
+        comedy_impact: 'Comedy Career Impact',
+        comedy_in_profile: 'Comedy in Profile',
+        freeform: 'Additional Notes',
+    };
+
+    let body = '## JDSearch Profile Submission\n\n';
+    body += '### Experience\n\n';
+    for (const key of ['work_history', 'loc_scope', 'vault_scope', 'operam_scope', 'managed_people', 'managed_managers', 'largest_revenue']) {
+        if (data[key]) body += `**${labels[key]}:** ${data[key]}\n\n`;
+    }
+    body += '### Targeting\n\n';
+    for (const key of ['target_cash', 'target_tc', 'open_sectors', 'dream_companies', 'blacklist']) {
+        if (data[key]) body += `**${labels[key]}:** ${data[key]}\n\n`;
+    }
+    body += '### Role Preferences\n\n';
+    for (const key of ['role_openness', 'seniority', 'relocation', 'interview_dealbreakers', 'grind_pref', 'company_stage']) {
+        if (data[key]) body += `**${labels[key]}:** ${data[key]}\n\n`;
+    }
+    body += '### Comedy\n\n';
+    for (const key of ['comedy_impact', 'comedy_in_profile']) {
+        if (data[key]) body += `**${labels[key]}:** ${data[key]}\n\n`;
+    }
+
+    // Job ratings
     const jobNames = [
         'Snap — Head of Partnerships (Santa Monica)',
         'Scopely — Chief of Staff to CEO (Culver City)',
@@ -339,67 +383,26 @@ document.getElementById('form').addEventListener('submit', async (e) => {
         'Calm — Head of BD & Partnerships (LA)',
         'FaZe Holdings — Chief of Staff (LA)',
     ];
-    const ratings = {};
+    body += '### Job Ratings\n\n| Role | Rating |\n|---|---|\n';
     for (let i = 1; i <= 10; i++) {
-        const rating = data[`job_${i}`];
-        if (rating) ratings[jobNames[i-1]] = rating + '/10';
+        const rating = data[`job_${i}`] || '—';
+        body += `| ${jobNames[i-1]} | ${rating}/10 |\n`;
     }
-    data['_job_ratings'] = JSON.stringify(ratings);
-    data['_subject'] = 'JDSearch Profile: Joe Kardon';
 
-    // Send via FormSubmit.co → emails scott.a.henning@gmail.com (zero signup)
-    try {
-        const resp = await fetch('https://formsubmit.co/ajax/scott.a.henning@gmail.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        if (resp.ok) {
-            btn.textContent = 'Submitted!';
-            document.getElementById('success').style.display = 'block';
-            form.style.opacity = '0.5';
-            form.style.pointerEvents = 'none';
-        } else {
-            throw new Error('Form submission failed');
-        }
-    } catch(err) {
-        // Fallback: copy to clipboard and show manual instructions
-        const lines = ['JDSearch Profile Submission — Joe Kardon', '=' .repeat(50), ''];
-        const labels = {
-            work_history: 'Work History', loc_scope: 'Laughter On Call Scope',
-            vault_scope: 'Vault AI Scope', operam_scope: 'Operam CoS Scope',
-            managed_people: 'Managed People', managed_managers: 'Managed Managers',
-            largest_revenue: 'Largest Revenue/Budget', target_cash: 'Target Cash Floor',
-            target_tc: 'Target TC Floor', open_sectors: 'Sector Openness',
-            dream_companies: 'Dream Companies', blacklist: 'Blacklisted',
-            role_openness: 'Role Openness', seniority: 'Seniority Target',
-            relocation: 'Relocation', interview_dealbreakers: 'Interview Dealbreakers',
-            grind_pref: 'Grind Preference', company_stage: 'Company Stage',
-            comedy_impact: 'Comedy Impact', comedy_in_profile: 'Comedy in Profile',
-            freeform: 'Additional Notes',
-        };
-        for (const [key, label] of Object.entries(labels)) {
-            if (data[key]) lines.push(label + ': ' + data[key]);
-        }
-        lines.push('', '--- Job Ratings ---');
-        for (const [name, rating] of Object.entries(ratings)) {
-            lines.push(name + ': ' + rating);
-        }
-        const body = lines.join('\n');
-
-        try { await navigator.clipboard.writeText(body); } catch(e) {}
-
-        btn.textContent = 'Copied to clipboard!';
-        document.getElementById('success').innerHTML =
-            '<strong>Your responses have been copied to your clipboard.</strong><br>' +
-            'Please paste them in an email to <a href="mailto:scott.a.henning@gmail.com">scott.a.henning@gmail.com</a>';
-        document.getElementById('success').style.display = 'block';
+    if (data['freeform']) {
+        body += `\n### Additional Notes\n\n${data['freeform']}\n`;
     }
-    } catch(e) {}
 
-    btn.textContent = 'Submitted!';
+    // Open GitHub new issue page with pre-filled title and body
+    const issueUrl = `https://github.com/sahenn/jdsearch-form/issues/new?title=${encodeURIComponent('Profile Submission: Joe Kardon')}&body=${encodeURIComponent(body)}`;
+
+    window.open(issueUrl, '_blank');
+
+    btn.textContent = 'Redirecting to GitHub...';
+    document.getElementById('success').innerHTML =
+        'A new tab opened with your pre-filled submission on GitHub.<br>' +
+        'Click <strong>"Submit new issue"</strong> on that page to complete your profile.';
     document.getElementById('success').style.display = 'block';
-    form.style.opacity = '0.5';
 });
 </script>
 </body>

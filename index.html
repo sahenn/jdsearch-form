@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JDSearch — Profile Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #fafafa; color: #1a1a1a; line-height: 1.6; }
+.container { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+h2 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; color: #334155; }
+h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+p.subtitle { color: #64748b; margin-bottom: 1.5rem; }
+.section { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.3rem; color: #334155; }
+label small { font-weight: 400; color: #94a3b8; }
+input, select, textarea { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.9rem; font-family: inherit; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; transition: border-color 0.15s; margin-bottom: 1rem; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+textarea { resize: vertical; min-height: 80px; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.chip { padding: 0.3rem 0.75rem; font-size: 0.8rem; border: 1px solid #e2e8f0; border-radius: 100px; cursor: pointer; transition: all 0.15s; background: #fff; }
+.chip.selected { background: #eef2ff; color: #4f46e5; border-color: #6366f1; }
+.chip:hover { border-color: #6366f1; }
+.job-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; }
+.job-card-title { font-weight: 600; font-size: 0.9rem; }
+.job-card-meta { font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0.5rem; }
+.job-card-meta a { color: #6366f1; }
+.rating-row { display: flex; align-items: center; gap: 0.5rem; }
+.rating-row label { margin: 0; font-size: 0.8rem; white-space: nowrap; }
+.rating-row select { width: 80px; margin: 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.7rem 2rem; font-size: 1rem; font-weight: 600; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: all 0.15s; }
+.btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.success { background: #d1fae5; border: 1px solid #10b981; border-radius: 10px; padding: 1rem; text-align: center; color: #065f46; font-weight: 500; display: none; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+.required::after { content: ' *'; color: #ef4444; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>JDSearch Profile Setup</h1>
+<p class="subtitle">Hi Joe — fill this out so we can find the right roles for you. Takes ~10 minutes. Everything here stays between you and Scott.</p>
+
+<form id="form">
+
+<!-- SECTION 1: Experience -->
+<h2>1. Experience & Resume</h2>
+
+<div class="section">
+<label class="required">Full work history with titles and dates</label>
+<small style="color:#94a3b8;display:block;margin-bottom:0.5rem;">List each role: Company, Title, Dates, 1-2 sentences on what you did. Most recent first.</small>
+<textarea name="work_history" rows="10" placeholder="Laughter On Call — Head of BD & Growth (2022-present)&#10;Built the BD function from scratch...&#10;&#10;Vault AI — Director of Business Development (Jan-Sep 2022)&#10;Sold AI-powered audience analytics to entertainment companies..."></textarea>
+
+<label class="required">At Laughter On Call, what do you own?</label>
+<textarea name="loc_scope" rows="3" placeholder="Revenue? Team size? Enterprise sales vs. partnerships vs. events? Did you build BD from scratch?"></textarea>
+
+<label>At Vault AI, what did you sell and to whom?</label>
+<textarea name="vault_scope" rows="3" placeholder="Product, buyer persona, deal sizes, notable clients..."></textarea>
+
+<label>At Operam, what was your scope as Chief of Staff?</label>
+<textarea name="operam_scope" rows="3" placeholder="Company size, what CoS meant there, key projects..."></textarea>
+
+<div class="row">
+<div>
+<label class="required">Have you managed people directly?</label>
+<select name="managed_people">
+<option value="">Select...</option>
+<option value="no">No direct reports</option>
+<option value="1-3">1-3 people</option>
+<option value="4-10">4-10 people</option>
+<option value="10+">10+ people</option>
+</select>
+</div>
+<div>
+<label>Managed managers?</label>
+<select name="managed_managers">
+<option value="">Select...</option>
+<option value="no">No</option>
+<option value="yes">Yes</option>
+</select>
+</div>
+</div>
+
+<label>Largest budget or revenue you've owned</label>
+<input name="largest_revenue" placeholder="e.g., $500K ARR, $2M budget, etc.">
+</div>
+
+<!-- SECTION 2: Targeting -->
+<h2>2. What You're Looking For</h2>
+
+<div class="section">
+<div class="row">
+<div>
+<label class="required">Target cash compensation (floor)</label>
+<select name="target_cash">
+<option value="100000">$100K+</option>
+<option value="125000">$125K+</option>
+<option value="150000" selected>$150K+</option>
+<option value="175000">$175K+</option>
+<option value="200000">$200K+</option>
+<option value="250000">$250K+</option>
+</select>
+</div>
+<div>
+<label class="required">Target total comp (floor)</label>
+<select name="target_tc">
+<option value="150000">$150K+</option>
+<option value="200000" selected>$200K+</option>
+<option value="250000">$250K+</option>
+<option value="300000">$300K+</option>
+<option value="400000">$400K+</option>
+</select>
+</div>
+</div>
+
+<label>Open to roles outside entertainment/media?</label>
+<select name="open_sectors">
+<option value="">Select...</option>
+<option value="entertainment_only">Entertainment/media only</option>
+<option value="prefer_entertainment">Prefer entertainment, open to others</option>
+<option value="open_all">Open to any sector</option>
+</select>
+
+<label>5-10 dream companies <small>(comma separated)</small></label>
+<textarea name="dream_companies" rows="2" placeholder="e.g., Netflix, Spotify, Live Nation, CAA, Snap, Hulu, Warner Music..."></textarea>
+
+<label>Companies or industries to blacklist <small>(never show me)</small></label>
+<textarea name="blacklist" rows="2" placeholder="e.g., defense, tobacco, specific companies..."></textarea>
+</div>
+
+<!-- SECTION 3: Role Fit -->
+<h2>3. Role Preferences</h2>
+
+<div class="section">
+<label>Do you want to stay in BD/Growth, or are you open to pivoting?</label>
+<div class="chips" data-name="role_openness">
+<div class="chip" data-value="bd_only">BD/Growth only</div>
+<div class="chip selected" data-value="bd_prefer">Prefer BD, open to strategy/ops</div>
+<div class="chip" data-value="open_all">Open to anything strategic</div>
+</div>
+
+<label>How senior are you targeting?</label>
+<div class="chips" data-name="seniority">
+<div class="chip" data-value="manager">Manager/Sr Manager</div>
+<div class="chip selected" data-value="director">Director</div>
+<div class="chip" data-value="vp">VP</div>
+<div class="chip" data-value="c_suite">C-Suite</div>
+</div>
+
+<label>Would you relocate?</label>
+<select name="relocation">
+<option value="la_only">LA only, no relocation</option>
+<option value="la_prefer" selected>Prefer LA, would consider NYC/SF for right role</option>
+<option value="anywhere">Would go anywhere</option>
+</select>
+
+<label>Interview dealbreakers? <small>(anything you'd refuse)</small></label>
+<input name="interview_dealbreakers" placeholder="e.g., case studies, 8-round panels, take-homes...">
+
+<label>Work-life balance</label>
+<select name="grind_pref">
+<option value="chill">~40h/wk max (hard ceiling)</option>
+<option value="standard">~45h/wk is fine</option>
+<option value="moderate" selected>~50h/wk for the right opportunity</option>
+<option value="any">Hours don't matter if the role is right</option>
+</select>
+
+<label>Company stage preference</label>
+<div class="chips" data-name="company_stage" data-multi="true">
+<div class="chip selected" data-value="seed_a">Seed / Series A</div>
+<div class="chip selected" data-value="b_c">Series B-C</div>
+<div class="chip selected" data-value="d_plus">Series D+</div>
+<div class="chip" data-value="public">Public</div>
+<div class="chip selected" data-value="pe">PE-backed</div>
+</div>
+</div>
+
+<!-- SECTION 4: Comedy -->
+<h2>4. Comedy & Dual Career</h2>
+
+<div class="section">
+<label>Does your comedy career affect your job search?</label>
+<select name="comedy_impact">
+<option value="">Select...</option>
+<option value="no_impact">No — keep it separate</option>
+<option value="flexibility">Yes — I need schedule flexibility for shows</option>
+<option value="advantage">Yes — I want roles where it's a plus (entertainment, creative)</option>
+</select>
+
+<label>Should we mention comedy in your candidate profile?</label>
+<select name="comedy_in_profile">
+<option value="">Select...</option>
+<option value="yes">Yes — it's a differentiator</option>
+<option value="no">No — keep it out</option>
+<option value="subtle">Subtle mention (public speaking, creativity)</option>
+</select>
+</div>
+
+<!-- SECTION 5: Rate These Jobs -->
+<h2>5. Rate These Jobs (1-10)</h2>
+<p style="color:#64748b;font-size:0.85rem;margin-bottom:1rem;">We found these for you. Rate each one: 1 = terrible fit, 10 = perfect. This helps us calibrate what to show you.</p>
+
+<div class="section">
+
+<div class="job-card">
+<div class="job-card-title">VP & General Manager, North America — Veralto Global</div>
+<div class="job-card-meta">Remote • TC $345K-$500K</div>
+<div class="rating-row"><label>Your rating:</label><select name="job_1"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">GM/P&L role at an industrial tech company</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Head of Partnerships — LaunchDarkly</div>
+<div class="job-card-meta">Remote - US • TC $290K-$400K • <a href="https://job-boards.greenhouse.io/launchdarkly/jobs/7663549003" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_2"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Partnerships at a dev-tools SaaS (Series D)</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Enterprise Growth Lead — Perplexity AI</div>
+<div class="job-card-meta">San Francisco • OTE $200K-$400K • <a href="https://jobs.ashbyhq.com/perplexity/b6ae7fbd-70e1-4d1f-9333-cc7ec3f73846" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_3"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Growth at a hot AI startup (requires SF)</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Director, Strategic Partnerships, Americas — Airwallex</div>
+<div class="job-card-meta">US - San Francisco • TC $270K-$420K • <a href="https://jobs.ashbyhq.com/airwallex/fea86caa-5446-4253-ab63-cda20194a7d1" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_4"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Fintech partnerships at a global company</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Strategic Partnerships Lead, Corp Dev — Apple</div>
+<div class="job-card-meta">Cupertino (likely) • TC $400K-$600K • <a href="https://jobs.apple.com/en-us/details/200646043-0836/strategic-partnerships-lead-corporate-development" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_5"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Big tech corp dev / partnerships</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Head of Business Development — Blumind</div>
+<div class="job-card-meta">SF Bay Area • TC $300K-$500K</div>
+<div class="rating-row"><label>Your rating:</label><select name="job_6"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">BD at an AI hardware startup</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Founding Product Growth Lead — Harvey</div>
+<div class="job-card-meta">San Francisco • TC $307K-$417K • <a href="https://jobs.ashbyhq.com/harvey/9ce0c68b-80f2-4467-88d0-02473f98e2d4" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_7"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Product growth at an AI legal tech startup</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Sr Director, Strategic Customer Transformation — ServiceNow</div>
+<div class="job-card-meta">Santa Clara, CA • TC $350K-$500K • <a href="https://careers.servicenow.com/jobs/744000119251694/senior-director-strategic-customer-transformation/" target="_blank">View</a></div>
+<div class="rating-row"><label>Your rating:</label><select name="job_8"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Enterprise transformation at a large public SaaS</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Strategy & Transformation Lead (Office of the CEO) — Narvar</div>
+<div class="job-card-meta">Remote - Canada • TC $250K-$350K</div>
+<div class="rating-row"><label>Your rating:</label><select name="job_9"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">CEO strategy at an e-commerce logistics company</label></div>
+</div>
+
+<div class="job-card">
+<div class="job-card-title">Director, Strategic Partnerships — Model N</div>
+<div class="job-card-meta">Remote • TC $270K-$420K</div>
+<div class="rating-row"><label>Your rating:</label><select name="job_10"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><label style="color:#94a3b8">Partnerships at a revenue management SaaS (remote)</label></div>
+</div>
+
+</div>
+
+<!-- SECTION 6: Anything Else -->
+<h2>6. Anything Else</h2>
+<div class="section">
+<label>Anything we should know that wasn't covered above?</label>
+<textarea name="freeform" rows="4" placeholder="Special circumstances, timing, other considerations..."></textarea>
+</div>
+
+<div style="text-align:center;margin-top:2rem;">
+<button type="submit" class="btn" id="submitBtn">Submit Profile</button>
+</div>
+
+<div class="success" id="success">
+Profile submitted! Scott will update your search settings within 24 hours. You'll start receiving matched jobs at <strong>scott.a.henning+jbk@gmail.com</strong>.
+</div>
+
+</form>
+</div>
+
+<script>
+// Chip toggle logic
+document.querySelectorAll('.chips').forEach(container => {
+    const isMulti = container.dataset.multi === 'true';
+    container.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            if (isMulti) {
+                chip.classList.toggle('selected');
+            } else {
+                container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+            }
+        });
+    });
+});
+
+// Form submission — sends via mailto (no backend needed)
+document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const form = e.target;
+    const data = {};
+
+    // Collect all form fields
+    form.querySelectorAll('input, select, textarea').forEach(el => {
+        if (el.name) data[el.name] = el.value;
+    });
+
+    // Collect chip selections
+    form.querySelectorAll('.chips').forEach(container => {
+        const name = container.dataset.name;
+        const selected = [];
+        container.querySelectorAll('.chip.selected').forEach(c => selected.push(c.dataset.value));
+        data[name] = selected.join(', ');
+    });
+
+    // Format as readable text
+    const lines = ['JDSearch Profile Submission — Joe Kardon', '=' .repeat(50), ''];
+    const labels = {
+        work_history: 'Work History',
+        loc_scope: 'Laughter On Call Scope',
+        vault_scope: 'Vault AI Scope',
+        operam_scope: 'Operam CoS Scope',
+        managed_people: 'Managed People',
+        managed_managers: 'Managed Managers',
+        largest_revenue: 'Largest Revenue/Budget',
+        target_cash: 'Target Cash Floor',
+        target_tc: 'Target TC Floor',
+        open_sectors: 'Sector Openness',
+        dream_companies: 'Dream Companies',
+        blacklist: 'Blacklisted',
+        role_openness: 'Role Openness',
+        seniority: 'Seniority Target',
+        relocation: 'Relocation',
+        interview_dealbreakers: 'Interview Dealbreakers',
+        grind_pref: 'Grind Preference',
+        company_stage: 'Company Stage',
+        comedy_impact: 'Comedy Impact',
+        comedy_in_profile: 'Comedy in Profile',
+        freeform: 'Additional Notes',
+    };
+
+    for (const [key, label] of Object.entries(labels)) {
+        if (data[key]) lines.push(`${label}: ${data[key]}`);
+    }
+
+    lines.push('', '--- Job Ratings ---');
+    const jobNames = [
+        'Veralto Global — VP & GM',
+        'LaunchDarkly — Head of Partnerships',
+        'Perplexity AI — Enterprise Growth Lead',
+        'Airwallex — Dir Strategic Partnerships',
+        'Apple — Strategic Partnerships Lead',
+        'Blumind — Head of BD',
+        'Harvey — Founding Product Growth Lead',
+        'ServiceNow — Sr Dir Transformation',
+        'Narvar — Strategy & Transformation Lead',
+        'Model N — Dir Strategic Partnerships',
+    ];
+    for (let i = 1; i <= 10; i++) {
+        const rating = data[`job_${i}`];
+        if (rating) lines.push(`${jobNames[i-1]}: ${rating}/10`);
+    }
+
+    const body = lines.join('\n');
+
+    // Send via mailto
+    const mailtoLink = `mailto:scott.a.henning@gmail.com?subject=${encodeURIComponent('JDSearch Profile: Joe Kardon')}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+
+    // Also try to copy to clipboard as backup
+    try {
+        await navigator.clipboard.writeText(body);
+    } catch(e) {}
+
+    btn.textContent = 'Submitted!';
+    document.getElementById('success').style.display = 'block';
+    form.style.opacity = '0.5';
+});
+</script>
+</body>
+</html>
